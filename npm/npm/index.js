@@ -1,48 +1,51 @@
-import { defineComponent as Q, ref as v, onBeforeMount as X, onBeforeUnmount as Y, openBlock as M, createElementBlock as W, normalizeStyle as p0, createCommentVNode as j, renderSlot as f0, onMounted as g0, withDirectives as v0, vShow as F0 } from "vue";
-import w0 from "axios";
-import C0 from "lottie-web";
-const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
+import { defineComponent as X, ref as w, onBeforeMount as Y, onBeforeUnmount as Z, openBlock as M, createElementBlock as W, normalizeStyle as p0, createCommentVNode as G, renderSlot as g0, onMounted as v0, withDirectives as F0, vShow as w0 } from "vue";
+import C0 from "axios";
+import _0 from "lottie-web";
+const b0 = { key: 0 }, D0 = /* @__PURE__ */ X({
   __name: "vMiniWeather",
   props: {
     url: {
       type: String,
       default: "https://apia.aidioute.cn/weather/"
+    },
+    customRequest: {
+      type: Function
     }
   },
   emits: ["notice"],
   setup(x, { emit: t }) {
-    const y = x, i = (d) => d !== null && Object.prototype.toString.call(d) === "[object Object]", o = (d) => {
-      t("notice", d);
-    }, s = v(!1), n = v(""), p = v(""), F = () => {
+    const y = x, i = t, o = (d) => d !== null && Object.prototype.toString.call(d) === "[object Object]", s = (d) => {
+      i("notice", d);
+    }, e = w(!1), g = w(""), p = w(""), B = () => {
       typeof window < "u" && window.navigator.geolocation ? window.navigator.geolocation.getCurrentPosition(
         (d) => {
-          n.value = d.coords.latitude.toFixed(6), p.value = d.coords.longitude.toFixed(6);
+          g.value = d.coords.latitude.toFixed(6), p.value = d.coords.longitude.toFixed(6);
         },
         (d) => {
           switch (d.code) {
             case 0:
-              o({
+              s({
                 type: "warning",
                 from: "window.navigator.geolocation",
                 msg: "\u83B7\u53D6\u4F4D\u7F6E\u4FE1\u606F\u51FA\u9519\uFF01"
               });
               break;
             case 1:
-              o({
+              s({
                 type: "warning",
                 from: "window.navigator.geolocation",
                 msg: "\u963B\u6B62\u8BE5\u9875\u9762\u83B7\u53D6\u4F4D\u7F6E\u4FE1\u606F\uFF01"
               });
               break;
             case 2:
-              o({
+              s({
                 type: "warning",
                 from: "window.navigator.geolocation",
                 msg: "\u6D4F\u89C8\u5668\u65E0\u6CD5\u786E\u5B9A\u60A8\u7684\u4F4D\u7F6E\uFF01"
               });
               break;
             case 3:
-              o({
+              s({
                 type: "warning",
                 from: "window.navigator.geolocation",
                 msg: "\u83B7\u53D6\u4F4D\u7F6E\u4FE1\u606F\u8D85\u65F6\uFF01"
@@ -50,62 +53,67 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
               break;
           }
         }
-      ) : o({
+      ) : s({
         type: "warning",
         from: "window.navigator.geolocation",
         msg: "\u6D4F\u89C8\u5668\u4E0D\u652F\u6301 HTML5 \u7684\u5B9A\u4F4D\u529F\u80FD\uFF01"
       });
-    }, D = v(null), f = v("d00"), C = v(null), L = () => {
-      s.value || (s.value = !0, C.value && clearInterval(C.value), $(), C.value = setInterval(() => {
-        $();
+    }, v = w(null), L = w("d00"), _ = w(null), $ = () => {
+      e.value || (e.value = !0, _.value && clearInterval(_.value), j(), _.value = setInterval(() => {
+        j();
       }, 30 * 60 * 1e3));
-    }, $ = async () => {
-      const d = n.value && p.value ? `${y.url}?location_type=1&lat=${n.value}&lng=${p.value}&from=vmweather` : `${y.url}?location_type=0&from=vmweather`;
+    }, j = async () => {
+      const d = g.value && p.value ? `${y.url}?location_type=1&lat=${g.value}&lng=${p.value}&from=vmweather` : `${y.url}?location_type=0&from=vmweather`;
       try {
-        const _ = await w0.get(d);
-        if (_.status === 200) {
-          const { data: u } = _;
-          i(u) && "code" in u && "data" in u && u.code === 0 ? (i(u.data) && "location" in u.data && i(u.data.location) && "error_msg" in u.data.location && (console.log(`\u83B7\u53D6\u5B9A\u4F4D\u4FE1\u606F\u5931\u8D25; status: 200; error: ${u.data.location.error_msg}`), o({
+        let c;
+        if (y.customRequest ? c = await y.customRequest(d) : c = await C0.get(d), (c == null ? void 0 : c.status) === 200) {
+          const { data: u } = c;
+          o(u) && "code" in u && "data" in u && u.code === 0 ? (o(u.data) && "location" in u.data && o(u.data.location) && "error_msg" in u.data.location && (console.log(`\u83B7\u53D6\u5B9A\u4F4D\u4FE1\u606F\u5931\u8D25; status: 200; error: ${u.data.location.error_msg}`), s({
             type: "warning",
             from: "server",
             msg: u.data.location.error_msg
-          })), D.value = u.data.weather, f.value = u.data.weather.weathercode, s.value = !1) : (s.value = !1, i(u) && "msg" in u ? (console.log(`\u83B7\u53D6\u5929\u6C14\u8BF7\u6C42\u5931\u8D25; status: 200; error: ${u.msg}`), o({
+          })), v.value = u.data.weather, L.value = u.data.weather.weathercode, e.value = !1) : (e.value = !1, o(u) && "msg" in u ? (console.log(`\u83B7\u53D6\u5929\u6C14\u8BF7\u6C42\u5931\u8D25; status: 200; error: ${u.msg}`), s({
             type: "error",
             from: "server",
             msg: u.msg
-          })) : (console.log("\u83B7\u53D6\u5929\u6C14\u8BF7\u6C42\u5931\u8D25; status: 200; error: \u670D\u52A1\u5668\u5F02\u5E38"), o({
+          })) : (console.log("\u83B7\u53D6\u5929\u6C14\u8BF7\u6C42\u5931\u8D25; status: 200; error: \u670D\u52A1\u5668\u5F02\u5E38"), s({
             type: "error",
             from: "server",
             msg: "\u670D\u52A1\u5668\u5F02\u5E38"
           })));
-        }
-      } catch (_) {
-        s.value = !1, console.log(`\u83B7\u53D6\u5929\u6C14\u8BF7\u6C42\u5931\u8D25; status: ${_.response.status};`), o({
+        } else
+          e.value = !1, console.log(`\u83B7\u53D6\u5929\u6C14\u8BF7\u6C42\u5931\u8D25; status: ${c == null ? void 0 : c.status};`), s({
+            type: "error",
+            from: "axios.error",
+            msg: "\u7F51\u7EDC\u8BF7\u6C42\u5931\u8D25"
+          });
+      } catch (c) {
+        console.log(c), e.value = !1, console.log(`\u83B7\u53D6\u5929\u6C14\u8BF7\u6C42\u5931\u8D25; status: ${c.response.status};`), s({
           type: "error",
           from: "axios.error",
           msg: "\u7F51\u7EDC\u8BF7\u6C42\u5931\u8D25"
         });
       }
     };
-    return X(() => {
-      F(), L();
-    }), Y(() => {
-      C.value && clearInterval(C.value);
-    }), (d, _) => (M(), W("div", {
+    return Y(() => {
+      B(), $();
+    }), Z(() => {
+      _.value && clearInterval(_.value);
+    }), (d, c) => (M(), W("div", {
       class: "v-weather",
-      onClick: L,
-      style: p0(`cursor: ${s.value ? "not-allowed" : "pointer"}; user-select: none;`)
+      onClick: $,
+      style: p0(`cursor: ${e.value ? "not-allowed" : "pointer"}; user-select: none;`)
     }, [
-      s.value ? (M(), W("span", _0, "\u66F4\u65B0\u4E2D...")) : j("", !0),
-      s.value ? j("", !0) : f0(d.$slots, "default", {
+      e.value ? (M(), W("span", b0, "\u66F4\u65B0\u4E2D...")) : G("", !0),
+      e.value ? G("", !0) : g0(d.$slots, "default", {
         key: 1,
-        weather: D.value,
-        icon: f.value
+        weather: v.value,
+        icon: L.value
       })
     ], 4));
   }
-}), e = (x) => D0(x) && x.length === 3 && typeof x[0] == "number" && typeof x[1] == "number" && typeof x[2] == "number" && x[0] >= 0 && x[0] <= 255 && x[1] >= 0 && x[1] <= 255 && x[2] >= 0 && x[2] <= 255, k = (x) => Object.prototype.toString.call(x) === "[object Object]", D0 = (x) => Object.prototype.toString.call(x) === "[object Array]", Z = (x, t) => Object.prototype.hasOwnProperty.call(x, t), G = (x) => x0("fill", x), S0 = (x) => x0("line", x), P = (x) => y0("fill", x), B0 = (x) => y0("line", x), x0 = (x, t) => {
-  const y = x === "line" ? 20 : 24, i = t && e(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : [0.984313726425, 0.749019622803, 0.141176477075, 1], o = t0(x, "big", t);
+}), n = (x) => S0(x) && x.length === 3 && typeof x[0] == "number" && typeof x[1] == "number" && typeof x[2] == "number" && x[0] >= 0 && x[0] <= 255 && x[1] >= 0 && x[1] <= 255 && x[2] >= 0 && x[2] <= 255, k = (x) => Object.prototype.toString.call(x) === "[object Object]", S0 = (x) => Object.prototype.toString.call(x) === "[object Array]", x0 = (x, t) => Object.prototype.hasOwnProperty.call(x, t), P = (x) => t0("fill", x), B0 = (x) => t0("line", x), q = (x) => i0("fill", x), E0 = (x) => i0("line", x), t0 = (x, t) => {
+  const y = x === "line" ? 20 : 24, i = t && n(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : [0.984313726425, 0.749019622803, 0.141176477075, 1], o = y0(x, "big", t);
   return [
     {
       ddd: 0,
@@ -700,11 +708,11 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
   ml: 10,
   bm: 0,
   hd: !1
-}), E0 = (x, t) => x === "line" ? t === "small" ? 9 : 20 : t === "small" ? 4 : 6, t0 = (x, t, y) => {
-  const i = E0(x, t), o = y && e(y) ? [y[0] / 255, y[1] / 255, y[2] / 255, 1] : x === "line" ? [0.984313726425, 0.749019622803, 0.141176477075, 1] : [0.972549021244, 0.686274528503, 0.0941176489, 1];
+}), T0 = (x, t) => x === "line" ? t === "small" ? 9 : 20 : t === "small" ? 4 : 6, y0 = (x, t, y) => {
+  const i = T0(x, t), o = y && n(y) ? [y[0] / 255, y[1] / 255, y[2] / 255, 1] : x === "line" ? [0.984313726425, 0.749019622803, 0.141176477075, 1] : [0.972549021244, 0.686274528503, 0.0941176489, 1];
   if (x === "line")
     return [E(o, i)];
-  if (y && e(y))
+  if (y && n(y))
     return [E(o, i), {
       ty: "fl",
       c: {
@@ -729,7 +737,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       hd: !1
     }];
   {
-    const s = t === "small" ? [-21, -35] : [-41.517, -71.871], n = t === "small" ? [19.007, 34.294] : [42.497, 73.645];
+    const s = t === "small" ? [-21, -35] : [-41.517, -71.871], e = t === "small" ? [19.007, 34.294] : [42.497, 73.645];
     return [E(o, i), {
       ty: "gf",
       o: {
@@ -775,15 +783,15 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       },
       e: {
         a: 0,
-        k: n,
+        k: e,
         ix: 6
       },
       t: 1,
       hd: !1
     }];
   }
-}, y0 = (x, t) => {
-  const y = x === "line" ? 9 : 12, i = t && e(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : [0.984313726425, 0.749019622803, 0.141176477075, 1], o = t0(x, "small", t), s = {
+}, i0 = (x, t) => {
+  const y = x === "line" ? 9 : 12, i = t && n(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : [0.984313726425, 0.749019622803, 0.141176477075, 1], o = y0(x, "small", t), s = {
     ddd: 0,
     ind: 3,
     ty: 4,
@@ -1824,8 +1832,8 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       nm: "Mask 1"
     }
   ]), [s];
-}, I = (x, t) => [...s0(t), i0("fill", x)], T0 = (x, t) => [...s0(t), i0("line", x)], O = (x) => a0("fill", x), A0 = (x) => a0("line", x), i0 = (x, t) => {
-  const y = o0(x, "big", t);
+}, I = (x, t) => [...a0(t), o0("fill", x)], A0 = (x, t) => [...a0(t), o0("line", x)], O = (x) => e0("fill", x), M0 = (x) => e0("line", x), o0 = (x, t) => {
+  const y = s0(x, "big", t);
   return {
     ddd: 0,
     ind: 4,
@@ -2100,11 +2108,11 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
   lj: 2,
   bm: 0,
   hd: !1
-}), M0 = (x, t) => x === "line" ? t === "small" ? 9 : 20 : t === "small" ? 4 : 6, o0 = (x, t, y) => {
-  const i = M0(x, t), o = y && e(y) ? [y[0] / 255, y[1] / 255, y[2] / 255, 1] : [0.447058826685, 0.72549021244, 0.835294127464, 1];
+}), W0 = (x, t) => x === "line" ? t === "small" ? 9 : 20 : t === "small" ? 4 : 6, s0 = (x, t, y) => {
+  const i = W0(x, t), o = y && n(y) ? [y[0] / 255, y[1] / 255, y[2] / 255, 1] : [0.447058826685, 0.72549021244, 0.835294127464, 1];
   if (x === "line")
     return [b(o, i)];
-  if (y && e(y))
+  if (y && n(y))
     return [b(o, i), {
       ty: "fl",
       c: {
@@ -2129,7 +2137,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       hd: !1
     }];
   {
-    const s = t === "small" ? [-52, -68] : [-80.517, -105.871], n = t === "small" ? [32.541, 78.429] : [52.333, 124.231];
+    const s = t === "small" ? [-52, -68] : [-80.517, -105.871], e = t === "small" ? [32.541, 78.429] : [52.333, 124.231];
     return [b(o, i), {
       ty: "gf",
       o: {
@@ -2175,14 +2183,14 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       },
       e: {
         a: 0,
-        k: n,
+        k: e,
         ix: 6
       },
       t: 1,
       hd: !1
     }];
   }
-}, s0 = (x) => [
+}, a0 = (x) => [
   {
     ddd: 0,
     ind: 1,
@@ -3901,8 +3909,8 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     bm: 0
   }
 ], T = (x, t) => {
-  const i = t && e(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : [0.988235294819, 0.827450990677, 0.301960796118, 1];
-  return t && e(t) ? [b(i, 2), {
+  const i = t && n(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : [0.988235294819, 0.827450990677, 0.301960796118, 1];
+  return t && n(t) ? [b(i, 2), {
     ty: "fl",
     c: {
       a: 0,
@@ -3924,8 +3932,8 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     ml: 10,
     bm: 0,
     hd: !1
-  }] : [b(i, 2), W0(x)];
-}, W0 = (x) => {
+  }] : [b(i, 2), L0(x)];
+}, L0 = (x) => {
   let t, y;
   switch (x) {
     case 3: {
@@ -3992,8 +4000,8 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     t: 1,
     hd: !1
   };
-}, a0 = (x, t) => {
-  const y = o0(x, "small", t), i = {
+}, e0 = (x, t) => {
+  const y = s0(x, "small", t), i = {
     ddd: 0,
     ind: 3,
     ty: 4,
@@ -4653,7 +4661,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       }
     }
   ]), [i];
-}, r = (x) => e0("fill", x), h = (x) => e0("line", x), w = (x, t) => n0("fill", x, t), A = (x, t) => n0("line", x, t), V = (x) => l0("fill", x), L0 = (x) => l0("line", x), e0 = (x, t) => {
+}, r = (x) => n0("fill", x), f = (x) => n0("line", x), C = (x, t) => l0("fill", x, t), A = (x, t) => l0("line", x, t), V = (x) => r0("fill", x), $0 = (x) => r0("line", x), n0 = (x, t) => {
   const y = x === "line" ? {
     i: [
       [
@@ -4982,7 +4990,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       ]
     ],
     c: !0
-  }, i = $0(x, t);
+  }, i = j0(x, t);
   return [
     {
       ddd: 0,
@@ -5054,9 +5062,9 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       bm: 0
     }
   ];
-}, $0 = (x, t) => {
-  const y = x === "line" ? 15 : 6, i = t && e(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : x === "line" ? [0.886274516582, 0.909803926945, 0.941176474094, 1] : [0.901960790157, 0.937254905701, 0.988235294819, 1];
-  return x === "line" ? [m(i, y)] : t && e(t) ? [m(i, y), {
+}, j0 = (x, t) => {
+  const y = x === "line" ? 15 : 6, i = t && n(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : x === "line" ? [0.886274516582, 0.909803926945, 0.941176474094, 1] : [0.901960790157, 0.937254905701, 0.988235294819, 1];
+  return x === "line" ? [h(i, y)] : t && n(t) ? [h(i, y), {
     ty: "fl",
     c: {
       a: 0,
@@ -5078,7 +5086,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     ml: 10,
     bm: 0,
     hd: !1
-  }] : [m(i, y), {
+  }] : [h(i, y), {
     ty: "gf",
     o: {
       a: 0,
@@ -5137,7 +5145,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     mn: "ADBE Vector Graphic - G-Fill",
     hd: !1
   }];
-}, m = (x, t) => ({
+}, h = (x, t) => ({
   ty: "st",
   c: {
     a: 0,
@@ -5158,7 +5166,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
   lj: 1,
   bm: 0,
   hd: !1
-}), n0 = (x, t, y) => {
+}), l0 = (x, t, y) => {
   const i = [
     {
       ddd: 0,
@@ -5430,7 +5438,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
           },
           hd: !1
         },
-        ...j0(x, t)
+        ...G0(x, t)
       ],
       ip: 0,
       op: 360,
@@ -5732,7 +5740,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
           },
           hd: !1
         },
-        ...G0(x, y)
+        ...P0(x, y)
       ],
       ip: 0,
       op: 360,
@@ -6109,9 +6117,9 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       nm: "Mask 1"
     }
   ]), i;
-}, j0 = (x, t) => {
-  const y = x === "line" ? 15 : 6, i = t && e(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : x === "line" ? [0.886274516582, 0.909803926945, 0.941176474094, 1] : [0.901960790157, 0.937254905701, 0.988235294819, 1];
-  return x === "line" ? [m(i, y)] : t && e(t) ? [m(i, y), {
+}, G0 = (x, t) => {
+  const y = x === "line" ? 15 : 6, i = t && n(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : x === "line" ? [0.886274516582, 0.909803926945, 0.941176474094, 1] : [0.901960790157, 0.937254905701, 0.988235294819, 1];
+  return x === "line" ? [h(i, y)] : t && n(t) ? [h(i, y), {
     ty: "fl",
     c: {
       a: 0,
@@ -6133,7 +6141,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     ml: 10,
     bm: 0,
     hd: !1
-  }] : [m(i, y), {
+  }] : [h(i, y), {
     ty: "gf",
     o: {
       a: 0,
@@ -6190,9 +6198,9 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     t: 1,
     hd: !1
   }];
-}, G0 = (x, t) => {
-  const y = x === "line" ? 15 : 1, i = t && e(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : x === "line" ? [0.580392181873, 0.639215707779, 0.721568644047, 1] : [0.517647087574, 0.54509806633, 0.596078455448, 1];
-  return x === "line" ? [m(i, y)] : t && e(t) ? [m(i, y), {
+}, P0 = (x, t) => {
+  const y = x === "line" ? 15 : 1, i = t && n(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : x === "line" ? [0.580392181873, 0.639215707779, 0.721568644047, 1] : [0.517647087574, 0.54509806633, 0.596078455448, 1];
+  return x === "line" ? [h(i, y)] : t && n(t) ? [h(i, y), {
     ty: "fl",
     c: {
       a: 0,
@@ -6214,7 +6222,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     ml: 10,
     bm: 0,
     hd: !1
-  }] : [m(i, y), {
+  }] : [h(i, y), {
     ty: "gf",
     o: {
       a: 0,
@@ -6271,7 +6279,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     t: 1,
     hd: !1
   }];
-}, l0 = (x, t) => [
+}, r0 = (x, t) => [
   {
     ddd: 0,
     ind: 13,
@@ -6572,16 +6580,16 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
         },
         hd: !1
       },
-      ...P0(x, t)
+      ...q0(x, t)
     ],
     ip: 0,
     op: 360,
     st: 0,
     bm: 0
   }
-], P0 = (x, t) => {
-  const y = x === "line" ? 12 : 6, i = t && e(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : x === "line" ? [0.901960790157, 0.937254905701, 0.988235294819, 1] : [0.901960790157, 0.937254905701, 0.988235294819, 1];
-  return x === "line" ? [m(i, y)] : t && e(t) ? [m(i, y), {
+], q0 = (x, t) => {
+  const y = x === "line" ? 12 : 6, i = t && n(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : x === "line" ? [0.901960790157, 0.937254905701, 0.988235294819, 1] : [0.901960790157, 0.937254905701, 0.988235294819, 1];
+  return x === "line" ? [h(i, y)] : t && n(t) ? [h(i, y), {
     ty: "fl",
     c: {
       a: 0,
@@ -6603,7 +6611,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     ml: 10,
     bm: 0,
     hd: !1
-  }] : [m(i, y), {
+  }] : [h(i, y), {
     ty: "gf",
     o: {
       a: 0,
@@ -6662,8 +6670,8 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     mn: "ADBE Vector Graphic - G-Fill",
     hd: !1
   }];
-}, c = (x, t) => {
-  const y = t && e(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : [0.039215687662, 0.352941185236, 0.831372559071, 1], i = {
+}, m = (x, t) => {
+  const y = t && n(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : [0.039215687662, 0.352941185236, 0.831372559071, 1], i = {
     small: [
       {
         o: {
@@ -21566,7 +21574,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       }
     ]
   };
-  return Z(i, x) || (x = "small"), i[x].map((o, s) => ({
+  return x0(i, x) || (x = "small"), i[x].map((o, s) => ({
     ddd: 0,
     ind: s + 1,
     ty: 4,
@@ -21716,8 +21724,8 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       ...o
     }
   }));
-}, g = (x, t) => {
-  const y = t && e(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : [0.039215687662, 0.352941185236, 0.831372559071, 1], i = t && e(t) ? {
+}, F = (x, t) => {
+  const y = t && n(t) ? [t[0] / 255, t[1] / 255, t[2] / 255, 1] : [0.039215687662, 0.352941185236, 0.831372559071, 1], i = t && n(t) ? {
     ty: "fl",
     c: {
       a: 0,
@@ -21788,7 +21796,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     },
     t: 1,
     hd: !1
-  }, o = [360, -360, 360], s = [55, 0, -55], n = [
+  }, o = [360, -360, 360], s = [55, 0, -55], e = [
     [
       [
         52.961,
@@ -21855,7 +21863,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
         104.125
       ]
     ]
-  ], p = [
+  ], g = [
     [
       [
         75.573,
@@ -22270,7 +22278,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
         113.125
       ]
     ]
-  ], F = {
+  ], p = {
     small: [
       {
         o: {
@@ -25996,9 +26004,9 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       }
     ]
   };
-  return Z(F, x) || (x = "small"), F[x].map((D, f) => ({
+  return x0(p, x) || (x = "small"), p[x].map((B, v) => ({
     ddd: 0,
-    ind: f + 1,
+    ind: v + 1,
     ty: 4,
     nm: "snowflake",
     sr: 1,
@@ -26055,7 +26063,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
                 2.866
               ]
             ],
-            v: n[f],
+            v: e[v],
             c: !0
           },
           ix: 2
@@ -26345,7 +26353,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
                 -1.913
               ]
             ],
-            v: p[f],
+            v: g[v],
             c: !0
           },
           ix: 2
@@ -26410,7 +26418,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
           {
             t: 359,
             s: [
-              o[f]
+              o[v]
             ]
           }
         ],
@@ -26419,7 +26427,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       a: {
         a: 0,
         k: [
-          s[f],
+          s[v],
           100,
           0
         ],
@@ -26435,11 +26443,11 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
         ],
         ix: 6
       },
-      ...D
+      ...B
     }
   }));
-}, S = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : [0.964705884457, 0.658823549747, 0.137254908681, 1], y = x && e(x) ? {
+}, D = (x) => {
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : [0.964705884457, 0.658823549747, 0.137254908681, 1], y = x && n(x) ? {
     ty: "fl",
     c: {
       a: 0,
@@ -27268,8 +27276,8 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     st: 0,
     bm: 0
   };
-}, q = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : [0.525490224361, 0.764705896378, 0.858823537827, 1], y = [
+}, z = (x) => {
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : [0.525490224361, 0.764705896378, 0.858823537827, 1], y = [
     {
       a: 1,
       k: [
@@ -30504,9 +30512,9 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       ]
     ]
   ];
-  return y.map((s, n) => ({
+  return y.map((s, e) => ({
     ddd: 0,
-    ind: n + 1,
+    ind: e + 1,
     ty: 4,
     nm: "ice-pellet",
     sr: 1,
@@ -30517,7 +30525,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
         k: 0,
         ix: 10
       },
-      p: i[n],
+      p: i[e],
       a: {
         a: 0,
         k: [
@@ -30592,7 +30600,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
                 0
               ]
             ],
-            v: o[n],
+            v: o[e],
             c: !0
           },
           ix: 2
@@ -30622,7 +30630,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     ct: 1,
     bm: 0
   }));
-}, r0 = (x, t) => t ? {
+}, k0 = (x, t) => t ? {
   ty: "st",
   c: {
     a: 0,
@@ -30781,7 +30789,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     }
   ],
   hd: !1
-}, k0 = (x) => [
+}, u0 = (x) => [
   {
     a: 1,
     k: [
@@ -31004,13 +31012,13 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
   op: 360,
   st: 0,
   bm: 0
-})), z = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
-  return k0(r0("fill", t));
+})), R = (x) => {
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
+  return u0(k0("fill", t));
 }, I0 = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
-  return k0(r0("line", t));
-}, B = (x, t) => t ? {
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
+  return u0(k0("line", t));
+}, S = (x, t) => t ? {
   ty: "st",
   c: {
     a: 0,
@@ -31129,7 +31137,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
   },
   bm: 0,
   hd: !1
-}, u0 = (x) => [
+}, d0 = (x) => [
   {
     a: 1,
     k: [
@@ -31352,7 +31360,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
   op: 360,
   st: 0,
   bm: 0
-})), d0 = (x) => [
+})), c0 = (x) => [
   {
     a: 1,
     k: [
@@ -31668,18 +31676,18 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
   st: 0,
   bm: 0
 })), K = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
-  return d0(B("fill", t));
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
+  return c0(S("fill", t));
 }, O0 = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
-  return d0(B("line", t));
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
+  return c0(S("line", t));
 }, N = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
-  return u0(B("fill", t));
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
+  return d0(S("fill", t));
 }, V0 = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
-  return u0(B("line", t));
-}, c0 = (x) => x ? {
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
+  return d0(S("line", t));
+}, m0 = (x) => x ? {
   ty: "fl",
   c: {
     a: 0,
@@ -31752,7 +31760,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
   t: 1,
   hd: !1
 }, U = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null, y = c0(t), i = [
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null, y = m0(t), i = [
     [424, 194, 0],
     [364, 194, 0],
     [392, 226, 0],
@@ -34695,9 +34703,9 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       ix: 11
     }
   ];
-  return i.map((s, n) => ({
+  return i.map((s, e) => ({
     ddd: 0,
-    ind: n + 1,
+    ind: e + 1,
     ty: 4,
     nm: "dust",
     sr: 1,
@@ -34722,7 +34730,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
         k: [100, 100, 100],
         ix: 6
       },
-      o: o[n]
+      o: o[e]
     },
     ao: 0,
     shapes: [
@@ -34767,7 +34775,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     bm: 0
   }));
 }, H = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null, y = c0(t), i = [
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null, y = m0(t), i = [
     {
       a: 1,
       k: [
@@ -36768,9 +36776,9 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
       ix: 2
     }
   ];
-  return i.map((s, n) => ({
+  return i.map((s, e) => ({
     ddd: 0,
-    ind: n + 1,
+    ind: e + 1,
     ty: 4,
     nm: "dust",
     sr: 1,
@@ -36791,7 +36799,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
         ix: 6
       },
       o: s,
-      p: o[n]
+      p: o[e]
     },
     ao: 0,
     shapes: [
@@ -36835,13 +36843,13 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     st: 0,
     bm: 0
   }));
-}, R = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
-  return h0(m0("fill", t));
-}, q0 = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
-  return h0(m0("line", t));
-}, m0 = (x, t) => t ? {
+}, J = (x) => {
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
+  return f0(h0("fill", t));
+}, z0 = (x) => {
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : null;
+  return f0(h0("line", t));
+}, h0 = (x, t) => t ? {
   ty: "st",
   c: {
     a: 0,
@@ -37056,7 +37064,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     }
   ],
   hd: !1
-}, h0 = (x) => {
+}, f0 = (x) => {
   const t = [
     [256, 188, 0],
     [198, 324, 0]
@@ -37285,8 +37293,8 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     st: 0,
     bm: 0
   }));
-}, J = (x) => {
-  const t = x && e(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : [0.215686276555, 0.258823543787, 0.317647069693, 1];
+}, Q = (x) => {
+  const t = x && n(x) ? [x[0] / 255, x[1] / 255, x[2] / 255, 1] : [0.215686276555, 0.258823543787, 0.317647069693, 1];
   return {
     ddd: 0,
     ind: 1,
@@ -37815,104 +37823,104 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
   d00: (x) => {
     if (k(x)) {
       const { sun: t, type: y } = x;
-      return a([...(y === "line" ? S0 : G)(t)]);
+      return a([...(y === "line" ? B0 : P)(t)]);
     } else
-      return a([...G()]);
+      return a([...P()]);
   },
   n00: (x) => {
     if (k(x)) {
       const { moon: t, star: y, type: i } = x;
-      return a([...(i === "line" ? T0 : I)(t, y)]);
+      return a([...(i === "line" ? A0 : I)(t, y)]);
     } else
       return a([...I()]);
   },
   d01: (x) => {
     if (k(x)) {
-      const { light: t, dark: y, sun: i, type: o } = x, s = o === "line" ? A : w, n = o === "line" ? B0 : P;
-      return a([...s(t, y), ...n(i)]);
+      const { light: t, dark: y, sun: i, type: o } = x, s = o === "line" ? A : C, e = o === "line" ? E0 : q;
+      return a([...s(t, y), ...e(i)]);
     } else
-      return a([...w(), ...P()]);
+      return a([...C(), ...q()]);
   },
   n01: (x) => {
     if (k(x)) {
-      const { light: t, dark: y, moon: i, type: o } = x, s = o === "line" ? A : w, n = o === "line" ? A0 : O;
-      return a([...s(t, y), ...n(i)]);
+      const { light: t, dark: y, moon: i, type: o } = x, s = o === "line" ? A : C, e = o === "line" ? M0 : O;
+      return a([...s(t, y), ...e(i)]);
     } else
-      return a([...w(), ...O()]);
+      return a([...C(), ...O()]);
   },
   "02": (x) => {
     if (k(x)) {
       const { light: t, dark: y, type: i } = x;
-      return a([...(i === "line" ? A : w)(t, y)]);
+      return a([...(i === "line" ? A : C)(t, y)]);
     } else
-      return a([...w()]);
+      return a([...C()]);
   },
   "07": (x) => {
     if (k(x)) {
-      const { rain: t, cloud: y, type: i } = x, o = i === "line" ? h : r;
-      return a([...c("small", t), ...o(y)]);
+      const { rain: t, cloud: y, type: i } = x, o = i === "line" ? f : r;
+      return a([...m("small", t), ...o(y)]);
     } else
-      return a([...c("small"), ...r()]);
+      return a([...m("small"), ...r()]);
   },
   "03": (x) => {
     if (k(x)) {
-      const { rain: t, cloud: y, type: i } = x, o = i === "line" ? h : r;
-      return a([...c("medium", t), ...o(y)]);
+      const { rain: t, cloud: y, type: i } = x, o = i === "line" ? f : r;
+      return a([...m("medium", t), ...o(y)]);
     } else
-      return a([...c("medium"), ...r()]);
+      return a([...m("medium"), ...r()]);
   },
   "09": (x) => {
     if (k(x)) {
-      const { rain: t, cloud: y, type: i } = x, o = i === "line" ? h : r;
-      return a([...c("heavy", t), ...o(y)]);
+      const { rain: t, cloud: y, type: i } = x, o = i === "line" ? f : r;
+      return a([...m("heavy", t), ...o(y)]);
     } else
-      return a([...c("heavy"), ...r()]);
+      return a([...m("heavy"), ...r()]);
   },
   14: (x) => {
     if (k(x)) {
-      const { snow: t, cloud: y, type: i } = x, o = i === "line" ? h : r;
-      return a([...g("small", t), ...o(y)]);
+      const { snow: t, cloud: y, type: i } = x, o = i === "line" ? f : r;
+      return a([...F("small", t), ...o(y)]);
     } else
-      return a([...g("small"), ...r()]);
+      return a([...F("small"), ...r()]);
   },
   13: (x) => {
     if (k(x)) {
-      const { snow: t, cloud: y, type: i } = x, o = i === "line" ? h : r;
-      return a([...g("medium", t), ...o(y)]);
+      const { snow: t, cloud: y, type: i } = x, o = i === "line" ? f : r;
+      return a([...F("medium", t), ...o(y)]);
     } else
-      return a([...g("medium"), ...r()]);
+      return a([...F("medium"), ...r()]);
   },
   16: (x) => {
     if (k(x)) {
-      const { snow: t, cloud: y, type: i } = x, o = i === "line" ? h : r;
-      return a([...g("heavy", t), ...o(y)]);
+      const { snow: t, cloud: y, type: i } = x, o = i === "line" ? f : r;
+      return a([...F("heavy", t), ...o(y)]);
     } else
-      return a([...g("heavy"), ...r()]);
+      return a([...F("heavy"), ...r()]);
   },
   "06": (x) => {
     if (k(x)) {
-      const { cloud: t, rain: y, snow: i, type: o } = x, s = o === "line" ? h : r;
-      return a([...c("medium", y), ...g("medium", i), ...s(t)]);
+      const { cloud: t, rain: y, snow: i, type: o } = x, s = o === "line" ? f : r;
+      return a([...m("medium", y), ...F("medium", i), ...s(t)]);
     } else
-      return a([...c("medium"), ...g("medium"), ...r()]);
+      return a([...m("medium"), ...F("medium"), ...r()]);
   },
   "04": (x) => {
     if (k(x)) {
-      const { cloud: t, rain: y, lightning: i, type: o } = x, s = o === "line" ? h : r;
-      return a([S(i), ...c("medium", y), ...s(t)]);
+      const { cloud: t, rain: y, lightning: i, type: o } = x, s = o === "line" ? f : r;
+      return a([D(i), ...m("medium", y), ...s(t)]);
     } else
-      return a([S(), ...c("medium"), ...r()]);
+      return a([D(), ...m("medium"), ...r()]);
   },
   "05": (x) => {
     if (k(x)) {
-      const { cloud: t, rain: y, lightning: i, hail: o, type: s } = x, n = s === "line" ? h : r;
-      return a([...c("medium", y), ...q(o), S(i), ...n(t)]);
+      const { cloud: t, rain: y, lightning: i, hail: o, type: s } = x, e = s === "line" ? f : r;
+      return a([...m("medium", y), ...z(o), D(i), ...e(t)]);
     } else
-      return a([...c("medium"), ...q(), S(), ...r()]);
+      return a([...m("medium"), ...z(), D(), ...r()]);
   },
   18: (x) => {
     if (k(x)) {
-      const { fog: t, cloud: y, type: i } = x, o = i === "line" ? V0 : N, s = i === "line" ? h : r;
+      const { fog: t, cloud: y, type: i } = x, o = i === "line" ? V0 : N, s = i === "line" ? f : r;
       return a([...o(t), ...s(y)]);
     } else
       return a([...N(), ...r()]);
@@ -37926,31 +37934,31 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
   },
   53: (x) => {
     if (k(x)) {
-      const { haze: t, cloud: y, type: i } = x, o = i === "line" ? I0 : z, s = i === "line" ? h : r;
+      const { haze: t, cloud: y, type: i } = x, o = i === "line" ? I0 : R, s = i === "line" ? f : r;
       return a([...o(t), ...s(y)]);
     } else
-      return a([...z(), ...r()]);
+      return a([...R(), ...r()]);
   },
   29: (x) => {
     if (k(x)) {
-      const { dust: t, cloud: y, type: i } = x, o = i === "line" ? L0 : V;
+      const { dust: t, cloud: y, type: i } = x, o = i === "line" ? $0 : V;
       return a([...U(t), ...o(y)]);
     } else
       return a([...U(), ...V()]);
   },
   20: (x) => {
     if (k(x)) {
-      const { wind: t, dust: y, type: i } = x, o = i === "line" ? q0 : R;
+      const { wind: t, dust: y, type: i } = x, o = i === "line" ? z0 : J;
       return a([...H(y), ...o(t)]);
     } else
-      return a([...H(), ...R()]);
+      return a([...H(), ...J()]);
   },
   99: (x) => {
     if (k(x)) {
       const { text: t } = x;
-      return a([J(t)]);
+      return a([Q(t)]);
     } else
-      return a([J()]);
+      return a([Q()]);
   },
   "08": (x) => l["03"](x),
   10: (x) => l["09"](x),
@@ -37977,7 +37985,7 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
   58: (x) => l[32](x),
   d301: (x) => l["03"](x),
   d302: (x) => l[13](x)
-}, z0 = ["id"], K0 = /* @__PURE__ */ Q({
+}, R0 = ["id"], K0 = /* @__PURE__ */ X({
   __name: "vMiniWeatherIcon",
   props: {
     icon: {
@@ -37990,9 +37998,9 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
     }
   },
   setup(x) {
-    const t = x, y = v(""), i = v(null), o = () => {
+    const t = x, y = w(""), i = w(null), o = () => {
       let s = "";
-      i.value && i.value.destroy(), t.icon in l ? s = t.icon : (/^\d+$/.test(t.icon) && (s = "d" + t.icon), /^[dn]\d+$/.test(t.icon) && (s = t.icon.slice(1))), s in l || (s = "99"), i.value = C0.loadAnimation({
+      i.value && i.value.destroy(), t.icon in l ? s = t.icon : (/^\d+$/.test(t.icon) && (s = "d" + t.icon), /^[dn]\d+$/.test(t.icon) && (s = t.icon.slice(1))), s in l || (s = "99"), i.value = _0.loadAnimation({
         container: document.getElementById(y.value),
         renderer: "svg",
         loop: !0,
@@ -38000,28 +38008,29 @@ const _0 = { key: 0 }, b0 = /* @__PURE__ */ Q({
         animationData: l[s]({ type: t.type })
       });
     };
-    return X(() => {
-      const n = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
-      let p = "";
-      for (let F = 0; F < 16; F++)
-        p += n[Math.round(Math.random() * n.length)];
-      y.value = `v-mini-weather-icon-${p}`;
-    }), g0(() => {
+    return Y(() => {
+      const e = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
+      let g = "";
+      for (let p = 0; p < 16; p++)
+        g += e[Math.round(Math.random() * e.length)];
+      y.value = `v-mini-weather-icon-${g}`;
+    }), v0(() => {
       o();
-    }), Y(() => {
+    }), Z(() => {
       i.value && i.value.destroy();
-    }), (s, n) => v0((M(), W("div", {
+    }), (s, e) => F0((M(), W("div", {
       id: y.value,
       class: "v-mini-weather-icon"
-    }, null, 8, z0)), [
-      [F0, x.icon]
+    }, null, 8, R0)), [
+      [w0, x.icon]
     ]);
   }
-}), R0 = (x) => {
-  x.component("vMiniWeather", b0), x.component("vMiniWeatherIcon", K0);
+}), J0 = (x) => {
+  x.component("vMiniWeather", D0), x.component("vMiniWeatherIcon", K0);
 };
+console.log("weather install ts...");
 export {
-  R0 as default,
-  b0 as vMiniWeather,
+  J0 as default,
+  D0 as vMiniWeather,
   K0 as vMiniWeatherIcon
 };

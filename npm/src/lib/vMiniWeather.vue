@@ -6,7 +6,11 @@ const props = defineProps({
   url: {
     type: String,
     default: 'https://apia.aidioute.cn/weather/'
-  }
+  },
+  // 用户自行处理 request, url、响应结构等
+  customRequest: {
+    type: Function,
+  },
 })
 const emit = defineEmits(['notice'])
 const isObject = (obj:unknown) => {
@@ -87,8 +91,13 @@ const handleGetWeather = async () => {
     ? `${props.url}?location_type=1&lat=${latitude.value}&lng=${longitude.value}&from=vmweather`
     : `${props.url}?location_type=0&from=vmweather`
   try {
-    const response = await axios.get(url)
-    if (response.status === 200) {
+    let response
+    if (props.customRequest) {
+      response = await props.customRequest(url)
+    } else {
+      response = await axios.get(url)
+    }
+    if (response?.status === 200) {
       const { data: result } = response
       if (isObject(result) &&
         'code' in result &&
@@ -128,8 +137,17 @@ const handleGetWeather = async () => {
           })
         }
       }
+    } else {
+      updating.value = false
+      console.log(`获取天气请求失败; status: ${response?.status};`)
+      handleSendError({
+        type: 'error',
+        from: 'axios.error',
+        msg: '网络请求失败'
+      })
     }
   } catch (err:any) {
+    console.log(err)
     updating.value = false
     console.log(`获取天气请求失败; status: ${err.response.status};`)
     handleSendError({
