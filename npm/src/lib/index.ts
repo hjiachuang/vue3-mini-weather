@@ -12,3 +12,5 @@ export {
     vMiniWeather,
     vMiniWeatherIcon
 }
+
+console.log('weather install ts...')

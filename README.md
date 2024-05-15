@@ -90,6 +90,12 @@ import { vMiniWeather, vMiniWeatherIcon } from 'vue3-mini-weather'
 url: {     // 天气小组件调用的天气查询API
   type: String,
   default: 'https://apia.aidioute.cn/weather/'
+},
+
+// 自定义请求，可用于模拟数据、格式化接口参数等
+// 返回 示例： Promise.resolve({ status: 200, data: {...} }), 与默认 api 一致 
+customRequest: {
+  type: (url) => Promise<any>
 }
 
 // v-mini-weather-icon参数

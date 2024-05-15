@@ -31,8 +31,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import vMiniWeather from './lib/vMiniWeather.vue'
-import vMiniWeatherIcon from './lib/vMiniWeatherIcon/vMiniWeatherIcon.vue'
+import { vMiniWeather, vMiniWeatherIcon } from '../npm'
 
 const weather = ref([
   {
@@ -270,4 +269,4 @@ const weather = ref([
 .v-weather span {
   color: #333;
 }
-</style>
+</style>../npm
